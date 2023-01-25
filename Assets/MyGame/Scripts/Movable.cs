@@ -5,6 +5,12 @@ public class Movable : MonoBehaviour
 
     public Manager.MovableType type;
     private int position;
+    [SerializeField]
+    private float swimDuration = 2;
+    [SerializeField]
+    private float wiggleDuration = 0.5f;
+    [SerializeField]
+    private float wiggleAmount = 0.2f;
     private void Start()
     {
         position = type == Manager.MovableType.BOAT ? 0 : 4;
@@ -13,7 +19,14 @@ public class Movable : MonoBehaviour
     {
         position++;
         Debug.Log("Move " + type + " to " + GetMoveDestination(position));
-        LeanTween.moveLocalX(gameObject, GetMoveDestination(position), 1);
+
+        LeanTween.moveLocalY(gameObject, transform.position.y + wiggleAmount, wiggleDuration)
+        .setLoopPingPong(Mathf.FloorToInt((swimDuration / wiggleDuration) / 2))
+        .setEase(LeanTweenType.easeInOutQuad);
+
+        LeanTween.moveLocalX(gameObject, GetMoveDestination(position), swimDuration)
+        .setEase(LeanTweenType.easeInOutQuad);
+
     }
     public float GetAngle()
     {
@@ -35,6 +48,6 @@ public class Movable : MonoBehaviour
     }
     public float GetMoveDestination(int positionIndex)
     {
-        return positionIndex * 1.5f - 7;
+        return positionIndex * 1.5f - 8.5f;
     }
 }

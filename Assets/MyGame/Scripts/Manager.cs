@@ -32,6 +32,7 @@ public class Manager : MonoBehaviour
         if (isRolling)
             return;
         isRolling = true;
+        rollDiceButton.interactable = false;
         Movable movable = GetRandomMovable();
         LeanTween.rotateZ(rotationAnchor, (movable.GetAngle() - 360 * 3), rollDuration)
         .setEase(LeanTweenType.easeInOutQuad)
@@ -59,6 +60,7 @@ public class Manager : MonoBehaviour
     {
         movable.Move();
         isRolling = false;
+        rollDiceButton.interactable = true;
     }
 
 }

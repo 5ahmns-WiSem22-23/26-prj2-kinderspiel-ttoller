@@ -710,6 +710,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 3
+  swimDuration: 2
+  wiggleDuration: 0.5
+  wiggleAmount: 0.2
 --- !u!1 &416104906
 GameObject:
   m_ObjectHideFlags: 0
@@ -1547,6 +1550,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 4
+  swimDuration: 2
+  wiggleDuration: 0.5
+  wiggleAmount: 0.2
 --- !u!1 &1383630776
 GameObject:
   m_ObjectHideFlags: 0
@@ -2353,6 +2359,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  swimDuration: 2
+  wiggleDuration: 0.5
+  wiggleAmount: 0.2
 --- !u!1 &1806000489
 GameObject:
   m_ObjectHideFlags: 0
@@ -2521,6 +2530,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 2
+  swimDuration: 2
+  wiggleDuration: 0.5
+  wiggleAmount: 0.2
 --- !u!1 &1924954253
 GameObject:
   m_ObjectHideFlags: 0
@@ -2949,6 +2961,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
+  swimDuration: 2
+  wiggleDuration: 0.5
+  wiggleAmount: 0.2
 --- !u!1 &2125445614
 GameObject:
   m_ObjectHideFlags: 0
