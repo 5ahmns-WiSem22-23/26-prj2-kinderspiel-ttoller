@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Manager : MonoBehaviour
@@ -19,7 +20,8 @@ public class Manager : MonoBehaviour
     {
         FISHER_WIN,
         FISH_WIN,
-        TIE
+        TIE,
+        NONE
     }
     public List<GameObject> movables = new List<GameObject>();
     [SerializeField]
@@ -28,6 +30,18 @@ public class Manager : MonoBehaviour
     private GameObject rotationAnchor;
     [SerializeField]
     private float rollDuration = 5;
+
+    [SerializeField]
+    private GameObject menuCanvas;
+    [SerializeField]
+    private GameObject boatImages;
+    [SerializeField]
+    private GameObject fishImages;
+    [SerializeField]
+    private GameObject gameCanvas;
+    [SerializeField]
+    private Text titleText;
+    private GameOverType gameOverType = GameOverType.NONE;
     private void Start()
     {
         movables = GameObject.FindGameObjectsWithTag("Fish").Concat(GameObject.FindGameObjectsWithTag("Boat")).ToList();
@@ -46,16 +60,13 @@ public class Manager : MonoBehaviour
         List<MovableType> invalidTypes = movables.FindAll(m =>
         {
             Movable mov = m.GetComponent<Movable>();
-            return mov.endReached || mov.captured;
+            return mov.endReached || mov.captured || mov.type == MovableType.BOAT;
         })
         .Select(m => m.GetComponent<Movable>().type)
         .ToList();
 
         List<MovableType> validTypes = type.GetEnumValues().Cast<MovableType>().ToList().FindAll(t => !invalidTypes.Contains(t));
-
-        //increase chance of boat
-        validTypes.Add(MovableType.BOAT);
-
+        invalidTypes.ForEach(i => validTypes.Add(MovableType.BOAT));
         int index = UnityEngine.Random.Range(0, validTypes.Count());
         return validTypes[index];
     }
@@ -76,7 +87,6 @@ public class Manager : MonoBehaviour
     private void MoveFinished()
     {
         rollDiceButton.interactable = true;
-        bool gameOver = true;
         foreach (GameObject item in movables)
         {
             Movable mov = item.GetComponent<Movable>();
@@ -89,10 +99,6 @@ public class Manager : MonoBehaviour
             {
                 mov.endReached = true;
                 item.transform.localScale = Vector3.zero;
-            }
-            if (!mov.endReached && !mov.captured)
-            {
-                gameOver = false;
             }
         }
         HandleWinner();
@@ -121,16 +127,21 @@ public class Manager : MonoBehaviour
     private void GameOver(GameOverType type)
     {
         Debug.Log("Game Over, " + type);
+        gameOverType = type;
+        menuCanvas.SetActive(true);
+        gameCanvas.SetActive(false);
         switch (type)
         {
             case GameOverType.FISHER_WIN:
-                Debug.Log("Fisher wins");
+                titleText.text = "Die Fischer gewinnen!";
+                boatImages.SetActive(true);
                 break;
             case GameOverType.FISH_WIN:
-                Debug.Log("Fish wins");
+                titleText.text = "Die Fische gewinnen!";
+                fishImages.SetActive(true);
                 break;
             case GameOverType.TIE:
-                Debug.Log("Tie");
+                titleText.text = "Unendschieden!";
                 break;
         }
     }
@@ -144,4 +155,8 @@ public class Manager : MonoBehaviour
         }).Select(m => m.GetComponent<Movable>()).ToList();
     }
 
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 }

@@ -16,11 +16,22 @@ public class Movable : MonoBehaviour
     private void Start()
     {
         position = type == Manager.MovableType.BOAT ? 0 : 6;
+        if (type == Manager.MovableType.BOAT)
+        {
+            LeanTween.moveLocalX(gameObject, GetMoveDestination(position), 1)
+            .setEase(LeanTweenType.easeInOutQuad);
+        }
+        else
+        {
+            gameObject.transform.localScale = Vector3.zero;
+            LeanTween.scale(gameObject, Vector3.one * 0.25f, 1)
+            .setEase(LeanTweenType.easeInOutQuad);
+        }
     }
     public void Move(System.Action completeCallback)
     {
         position++;
-        Debug.Log("Move " + type + " to " + GetMoveDestination(position));
+        Debug.Log("Move " + type);
 
         LeanTween.moveLocalY(gameObject, transform.position.y + wiggleAmount, wiggleDuration)
         .setLoopPingPong(Mathf.FloorToInt((swimDuration / wiggleDuration) / 2))
@@ -28,6 +39,13 @@ public class Movable : MonoBehaviour
 
         LeanTween.moveLocalX(gameObject, GetMoveDestination(position), swimDuration)
         .setEase(LeanTweenType.easeInOutQuad);
+
+        if (type != Manager.MovableType.BOAT)
+        {
+            LeanTween.rotateZ(gameObject, wiggleAmount * 50, wiggleDuration / 4)
+            .setLoopPingPong(Mathf.FloorToInt((swimDuration / wiggleDuration)))
+            .setEase(LeanTweenType.easeInOutQuad);
+        }
 
     }
     public float GetAngle()
