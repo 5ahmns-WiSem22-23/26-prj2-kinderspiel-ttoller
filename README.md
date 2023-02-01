@@ -1,5 +1,8 @@
 # 26-prj2-kinderspiel-ttoller
 
+> **Note** 
+> Das Spiel kann [hier](https://5ahmns-wisem22-23.github.io/26-prj2-kinderspiel-ttoller/) getestet werden
+
 ## Kurzbeschreibung
 Ein Spiel wo Fische versuchen von einem Boot weg zu schwimmen. Werden sie es schaffen?
 
