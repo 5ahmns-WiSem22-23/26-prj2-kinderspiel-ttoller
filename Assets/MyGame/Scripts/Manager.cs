@@ -60,12 +60,23 @@ public class Manager : MonoBehaviour
         List<MovableType> invalidTypes = movables.FindAll(m =>
         {
             Movable mov = m.GetComponent<Movable>();
-            return mov.endReached || mov.captured;
+            return mov.endReached || mov.captured || mov.type == MovableType.BOAT;
         })
         .Select(m => m.GetComponent<Movable>().type)
         .ToList();
 
         List<MovableType> validTypes = type.GetEnumValues().Cast<MovableType>().ToList().FindAll(t => !invalidTypes.Contains(t));
+        int longestDistance = 0;
+        foreach (GameObject item in movables)
+        {
+            Movable mov = item.GetComponent<Movable>();
+            if (!validTypes.Contains(mov.type)) continue;
+            if (mov.position - GetBoatPos() > longestDistance) longestDistance = mov.position;
+        }
+        for (int i = 0; i < Mathf.Max(longestDistance - 5, 2); i++)
+        {
+            validTypes.Add(MovableType.BOAT);
+        }
         int index = UnityEngine.Random.Range(0, validTypes.Count());
         return validTypes[index];
     }
@@ -157,5 +168,10 @@ public class Manager : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    private int GetBoatPos()
+    {
+        return movables.Find(m => m.GetComponent<Movable>().type == MovableType.BOAT).GetComponent<Movable>().position;
     }
 }
