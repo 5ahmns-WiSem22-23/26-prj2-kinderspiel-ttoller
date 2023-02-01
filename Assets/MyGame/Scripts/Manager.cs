@@ -60,13 +60,12 @@ public class Manager : MonoBehaviour
         List<MovableType> invalidTypes = movables.FindAll(m =>
         {
             Movable mov = m.GetComponent<Movable>();
-            return mov.endReached || mov.captured || mov.type == MovableType.BOAT;
+            return mov.endReached || mov.captured;
         })
         .Select(m => m.GetComponent<Movable>().type)
         .ToList();
 
         List<MovableType> validTypes = type.GetEnumValues().Cast<MovableType>().ToList().FindAll(t => !invalidTypes.Contains(t));
-        invalidTypes.ForEach(i => validTypes.Add(MovableType.BOAT));
         int index = UnityEngine.Random.Range(0, validTypes.Count());
         return validTypes[index];
     }
